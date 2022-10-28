@@ -2,10 +2,7 @@ package com.xiguzai123.multipleautoconfigure.kafka;
 
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.kafka.ConcurrentKafkaListenerContainerFactoryConfigurer;
-import org.springframework.boot.autoconfigure.kafka.DefaultKafkaConsumerFactoryCustomizer;
-import org.springframework.boot.autoconfigure.kafka.DefaultKafkaProducerFactoryCustomizer;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.boot.autoconfigure.kafka.*;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -25,7 +22,7 @@ import java.util.Arrays;
  * @author chenyanhong
  * @since 2022-10-19 16:53
  */
-public class KafkaMultipleAutoconfigurator {
+public class KafkaMultipleAutoConfigurator {
 
     @SneakyThrows
     public static ConcurrentKafkaListenerContainerFactory<?, ?> kafkaListenerContainerFactory(KafkaProperties properties,
@@ -52,11 +49,15 @@ public class KafkaMultipleAutoconfigurator {
         return (ConcurrentKafkaListenerContainerFactory<?, ?>) kafkaListenerContainerFactory.invoke(instance, configurer, kafkaConsumerFactory);
     }
 
-    public static ConsumerFactory<?, ?> kafkaConsumerFactory(ObjectProvider<DefaultKafkaConsumerFactoryCustomizer> customizers) {
-        return null;
+    public static ConsumerFactory<?, ?> kafkaConsumerFactory(KafkaProperties properties,
+                                                             ObjectProvider<DefaultKafkaConsumerFactoryCustomizer> customizers) {
+        final KafkaAutoConfiguration kafkaAutoConfiguration = new KafkaAutoConfiguration(properties);
+        return kafkaAutoConfiguration.kafkaConsumerFactory(customizers);
     }
 
-    public static ProducerFactory<?, ?> kafkaProducerFactory(ObjectProvider<DefaultKafkaProducerFactoryCustomizer> customizers) {
-        return null;
+    public static ProducerFactory<?, ?> kafkaProducerFactory(KafkaProperties properties,
+                                                             ObjectProvider<DefaultKafkaProducerFactoryCustomizer> customizers) {
+        final KafkaAutoConfiguration kafkaAutoConfiguration = new KafkaAutoConfiguration(properties);
+        return kafkaAutoConfiguration.kafkaProducerFactory(customizers);
     }
 }
