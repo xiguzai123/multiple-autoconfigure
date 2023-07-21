@@ -42,7 +42,7 @@ public class KafkaMultipleAutoConfigurator {
         final Class<?> clazz = Class.forName("org.springframework.boot.autoconfigure.kafka.KafkaAnnotationDrivenConfiguration");
         final Constructor<?> constructor = ReflectionUtils.accessibleConstructor(clazz, KafkaProperties.class, ObjectProvider.class, ObjectProvider.class, ObjectProvider.class, ObjectProvider.class, ObjectProvider.class, ObjectProvider.class, ObjectProvider.class, ObjectProvider.class, ObjectProvider.class, ObjectProvider.class);
         constructor.setAccessible(true);
-        final Object instance = constructor.newInstance(properties, messageConverter, rebalanceListener, batchMessageConverter, kafkaTemplate, kafkaTransactionManager, rebalanceListener, errorHandler, batchErrorHandler, commonErrorHandler, afterRollbackProcessor, recordInterceptor);
+        final Object instance = constructor.newInstance(properties, messageConverter, recordFilterStrategy,rebalanceListener, batchMessageConverter, kafkaTemplate, kafkaTransactionManager, errorHandler, batchErrorHandler, commonErrorHandler, afterRollbackProcessor, recordInterceptor);
         final Method[] methods = ReflectionUtils.getDeclaredMethods(clazz);
         final Method kafkaListenerContainerFactory = Arrays.stream(methods).filter(method -> "kafkaListenerContainerFactory".equals(method.getName())).findFirst().orElse(null);
         kafkaListenerContainerFactory.setAccessible(true);
